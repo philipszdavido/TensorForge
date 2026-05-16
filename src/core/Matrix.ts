@@ -8,10 +8,10 @@ export class Matrix {
     private readonly cols: number,
     private readonly rows: number,
   ) {
-    for (let index = 0; index < rows; index++) {
-      const row = new Vector(cols);
+    for (let index = 0; index < this.rows; index++) {
+      const row = new Vector(this.cols);
 
-      for (let j = 0; j < cols; j++) {
+      for (let j = 0; j < this.cols; j++) {
         const col = j;
         row.set(j, col);
       }
@@ -42,5 +42,19 @@ export class Matrix {
     return data;
   }
 
-  static fromVector() {}
+  static fromVector(arr: Array<Vector>) {
+    const data = new Matrix(arr.length, arr[0].length());
+    for (let index = 0; index < arr.length; index++) {
+      const col = arr[index];
+      for (let j = 0; j < col.length(); j++) {
+        data.set(index, j, col.get(j));
+      }
+    }
+
+    return data;
+  }
+
+  print() {
+    console.log(this.data);
+  }
 }
