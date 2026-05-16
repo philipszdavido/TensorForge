@@ -14,12 +14,38 @@ export class Vector {
     return this.data[index];
   }
 
-  length() {
+  get length() {
     return this.data.length;
   }
 
+  sum(): number {
+    let result = 0;
+    for (let index = 0; index < this.data.length; index++) {
+      const element = this.data[index];
+      result += element;
+    }
+    return result;
+  }
+
+  mul(): number {
+    let result = 0;
+    for (let index = 0; index < this.data.length; index++) {
+      const element = this.data[index];
+      result *= element;
+    }
+    return result;
+  }
+
+  avg(): number {
+    let result = 0;
+    for (let index = 0; index < this.data.length; index++) {
+      const element = this.data[index];
+      result += element;
+    }
+    return result / this.length;
+  }
+
   static fromData(data: Float32Array) {
-    
     const newData = new Vector(data.length);
 
     for (let index = 0; index < data.length; index++) {
@@ -31,7 +57,6 @@ export class Vector {
   }
 
   static from(array: Array<number>): Vector {
-
     const newData = new Vector(array.length);
 
     for (let index = 0; index < array.length; index++) {
