@@ -31,13 +31,18 @@ export class Matrix {
   mul(a: Matrix) {
     const newData = new Matrix(a.cols, this.rows);
 
-    for (let index = 0; index < this.data.length; index++) {
-      const row = this.data[index];
-      for (let j = 0; j < row.length; j++) {
-        const rj = row.get(j);
-        const aj = a.get(index, j);
+    for (let i = 0; i < this.rows; i++) {
+      for (let j = 0; j < a.cols; j++) {
+        let sum = 0;
+        for (let k = 0; k < this.cols; k++) {
+          const result = this.get(i, j) * a.get(i, j);
+          sum += result;
+        }
+
+        newData.set(i, j, sum);
       }
     }
+    return newData;
   }
 
   // [[0,1,2,3,4,5]]
