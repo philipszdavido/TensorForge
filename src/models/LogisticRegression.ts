@@ -1,45 +1,85 @@
+import assert from "../assert/assert";
 import { Vector } from "../core/Vector";
 import error from "../error/error";
+import random from "../math/random";
 import sigmoid from "../math/sigmoid";
 import dot from "../math/vector/dot";
 
-export default class LogisticExpression {
+// features = [[1,3], [4,2]]
+// label    = [ 0,    1]
 
-  predict(x: number[], weights: number[], bias: number) {
+export default class LogisticRegression {
+  private weights: number[];
+  constructor(
+    public readonly features: number[][],
+    public readonly labels: number[],
+    private epochs: number = 1000,
+    private bias: number = -1,
+    private learningRate: number = 0.2,
+  ) {
+    this.weights = new Array(features[0].length);
+
+    for (let i = 0; i < this.weights.length; i++) {
+      this.weights[i] = random() + i;
+    }
+  }
+
+  private adjustWeights(error: number, features: number[]) {
+    this.setWeights(
+      this.weights.map(
+        (weight, i) => weight + this.learningRate * error * features[i],
+      ),
+    );
+  }
+
+  private adjustBias(error: number) {
+    const bias = this.bias + this.learningRate * error;
+    this.setBias(bias);
+  }
+
+  protected calc(x: number[], weights: number[], bias: number) {
     const result = dot(Vector.from(x), Vector.from(weights));
     return result + bias;
   }
 
-  train(features: number[][], label: number[]) {
-    let bias = -1;
-    // we want to predict if bug is ladybird
+  setLearningRate(l: number) {
+    assert(typeof l == "number");
+    this.learningRate = l;
+  }
 
-    // width contributes more to a bug being a ladybird
-    // length contributes less
+  setEpochs(e: number) {
+    assert(typeof e == "number");
+    this.epochs = e;
+  }
 
-    let learningRate = 0.2;
-    let weights = new Array(features[0].length).fill(0)
+  setBias(bias: number) {
+    this.bias = bias;
+  }
 
-    const epochs = 100;
+  setWeights(weights: number[]) {
+    this.weights = weights;
+  }
 
-    for (let i = 0; i < epochs; i++) {
-      features.forEach((feat, i) => {
+  protected activate(x: number) {
+    return sigmoid(x);
+  }
 
-        const y_bar = this.predict(
-          feat,
-          weights,
-          bias,
-        );
+  predict(x: number[]) {
+    return this.activate(this.calc(x, this.weights, this.bias));
+  }
 
-        const predicted = sigmoid(y_bar);
-        const _error = error(predicted, label[i]);
+  train() {
+    for (let i = 0; i < this.epochs; i++) {
+      this.features.forEach((feat, i) => {
+        const y_bar = this.calc(feat, this.weights, this.bias);
 
-        weights = weights.map((weight) => learningRate * _error * weight);
-        bias += learningRate * _error;
+        const predicted = this.activate(y_bar);
+        const _error = error(predicted, this.labels[i]);
+
+        this.adjustWeights(_error, feat);
+
+        this.adjustBias(_error);
       });
     }
   }
 }
-
-// features = [[1,3], [4,2]]
-// label    = [ 0,    1]
