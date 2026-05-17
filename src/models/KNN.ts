@@ -21,7 +21,7 @@ export default class KNN {
     public readonly k?: number,
   ) {
     if (!k) {
-      k = Math.sqrt(samples.length);
+      this.k = Math.sqrt(samples.length);
     }
   }
 
@@ -44,20 +44,17 @@ export default class KNN {
       // calculate distance to every point
       const d = this.euclidean_distance(sample.data, data);
       distances.push({ distance: d, label: sample.label });
-
-      // sort by distance
-      distances.sort((a, b) => a.distance - b.distance);
-
-      // pick K nearest neighbors
-      kNearestNeighbors = distances.slice(0, this.k);
-
-      // majority vote
-      console.log("=====================");
-      
-      pred = this.majorityVote(kNearestNeighbors);
-      //console.log(d, pred, kNearestNeighbors);
-      console.log("=====================")
     }
+    
+    // sort by distance
+    distances.sort((a, b) => a.distance - b.distance);
+
+    // pick K nearest neighbors
+    kNearestNeighbors = distances.slice(0, this.k);
+
+    // majority vote
+    pred = this.majorityVote(kNearestNeighbors);
+
     return pred;
   }
 
@@ -73,10 +70,16 @@ export default class KNN {
     for (let i = 0; i < data.length; i++) {
       const element = data[i];
 
-      const previousVote = votes[element.label] || 0;
+      if (!votes[element.label]) {
+        votes[element.label] = 1;
+        continue;
+      }
 
-      votes[element.label] = element.distance + previousVote;
+      const previousVote = votes[element.label];
+
+      votes[element.label] = +previousVote + 1;
     }
+
     let highestVotes = 0;
     let keyWithHighestVotes = "";
     for (const key in votes) {
@@ -89,8 +92,6 @@ export default class KNN {
         keyWithHighestVotes = key;
       }
     }
-console.log(data, votes, keyWithHighestVotes);
-
     return keyWithHighestVotes;
   }
 }
