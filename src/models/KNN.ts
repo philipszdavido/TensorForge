@@ -10,8 +10,13 @@ import assert from "../assert/assert";
 //    d. Majority vote
 // 3. Return prediction
 
+export interface DataLabel {
+  data: number[];
+  label: string;
+}
+
 export default class KNN {
-  constructor(public readonly samples: number[][]) {}
+  constructor(public readonly samples: DataLabel[]) {}
 
   euclidean_distance(x1: number[], x2: number[]) {
     // Implementation for calculating distance between two points
@@ -24,12 +29,22 @@ export default class KNN {
   }
 
   predict(data: number[]) {
+    const distances = [];
+    let nearestLabel
     for (const sample of this.samples) {
       // calculate distance to every point
-      this.euclidean_distance(sample, data);
+      const d = this.euclidean_distance(sample.data, data);
+      distances.push({ distance: d, label: sample.label });
+
       // sort by distance
+      distances.sort((a, b) => a.distance - b.distance);
+
       // pick K nearest neighbors
+      nearestLabel=distances[0].label
+
       // majority vote
+
     }
+    return nearestLabel
   }
 }
