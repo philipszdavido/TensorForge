@@ -1,64 +1,81 @@
-import { Predictor } from "./Predictor";
+import assert from "../assert/assert";
+import { Vector } from "../core/Vector";
+import error from "../error/error";
+import random from "../math/random";
+import dot from "../math/vector/dot";
 
 export class LinearRegression {
-  private readonly epochs = 1000;
+  private weights: number[];
+  constructor(
+    public readonly features: number[][],
+    public readonly labels: number[],
+    private epochs: number = 1000,
+    private bias: number = -1,
+    private learningRate: number = 0.2,
+  ) {
+    this.weights = new Array(features[0].length);
 
-  fit(X: Array<number>, Y: Array<number>) {}
+    for (let i = 0; i < this.weights.length; i++) {
+      this.weights[i] = random() + i;
+    }
+  }
+
+  private adjustWeights(error: number, features: number[]) {
+    this.setWeights(
+      this.weights.map(
+        (weight, i) => weight + this.learningRate * error * features[i],
+      ),
+    );
+  }
+
+  private adjustBias(error: number) {
+    const bias = this.bias + this.learningRate * error;
+    this.setBias(bias);
+  }
+
+  protected calc(x: number[], weights: number[], bias: number) {
+    const result = dot(Vector.from(x), Vector.from(weights));
+    return result + bias;
+  }
+
+  setLearningRate(l: number) {
+    assert(typeof l == "number");
+    this.learningRate = l;
+  }
+
+  setEpochs(e: number) {
+    assert(typeof e == "number");
+    this.epochs = e;
+  }
+
+  setBias(bias: number) {
+    this.bias = bias;
+  }
+
+  setWeights(weights: number[]) {
+    this.weights = weights;
+  }
+
+  protected activate(x: number) {
+    return (x);
+  }
+
+  predict(x: number[]) {
+    return this.activate(this.calc(x, this.weights, this.bias));
+  }
 
   train() {
+    for (let i = 0; i < this.epochs; i++) {
+      this.features.forEach((feat, i) => {
+        const y_bar = this.calc(feat, this.weights, this.bias);
 
-    let weightNum = 0.01;
+        const predicted = this.activate(y_bar);
+        const _error = error(predicted, this.labels[i]);
 
-    const { height, weight } = _test;
+        this.adjustWeights(_error, feat);
 
-    let heightPredicted = this.predict(weight, weightNum);
-
-    let error = this.calcError(height, heightPredicted);
-
-    console.log(
-      "Height Predicted:",
-      heightPredicted,
-      "error:",
-      error,
-      "Actual Height:",
-      height,
-    );
-
-    while (error > 0) {
-      weightNum = this.adjustWeight(error, weightNum);
-
-      heightPredicted = this.predict(weight, weightNum);
-
-      error = this.calcError(height, heightPredicted);
-
-      console.log(
-        "Height Predicted:",
-        heightPredicted,
-        "error:",
-        error,
-        "Actual Height:",
-        height,
-      );
+        this.adjustBias(_error);
+      });
     }
-
-    console.log("Weight: ", weightNum);
-  }
-
-  calcError(actual: number, predicted: number) {
-    return actual - predicted;
-  }
-
-  adjustWeight(error: number, weight: number) {
-    if (error === 0) {
-      return weight;
-    }
-
-    weight = weight + 0.01;
-
-    return weight;
-  }
-
-  predict(x: number, m: number) {
-    return m * x;
   }
 }
