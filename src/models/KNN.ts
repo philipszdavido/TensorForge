@@ -42,10 +42,10 @@ export default class KNN {
 
     for (const sample of this.samples) {
       // calculate distance to every point
-      const d = this.euclidean_distance(sample.data, data);
-      distances.push({ distance: d, label: sample.label });
+      const distance = this.euclidean_distance(sample.data, data);
+      distances.push({ distance, label: sample.label });
     }
-    
+
     // sort by distance
     distances.sort((a, b) => a.distance - b.distance);
 
@@ -75,15 +75,12 @@ export default class KNN {
         continue;
       }
 
-      const previousVote = votes[element.label];
-
-      votes[element.label] = +previousVote + 1;
+      votes[element.label] = +(votes[element.label]) + 1;
     }
 
     let highestVotes = 0;
     let keyWithHighestVotes = "";
     for (const key in votes) {
-      if (!Object.hasOwn(votes, key)) continue;
 
       const numVotes = votes[key];
 
