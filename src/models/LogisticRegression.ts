@@ -90,8 +90,8 @@ export default class LogisticRegression extends Model {
     const errorValue = error(this.labels[i], predicted);
     this.gradBias = errorValue;
 
-    this.gradWeights = this.features.map(
-      (feature, i) => errorValue * feature[i],
+    this.gradWeights = features.map(
+      (feature) => errorValue * feature,
     );
   }
 }
