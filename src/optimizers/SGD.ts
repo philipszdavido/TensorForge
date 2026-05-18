@@ -15,7 +15,7 @@ export default class SGD {
 
     this.model.setWeights(newWeights);
 
-    const newBias = this.model.getGradBias() * this.learningRate;
+    const newBias = this.model.getGradBias() - this.learningRate * this.model.getGradBias();
     
     this.model.setBias(newBias);
 
