@@ -14,6 +14,16 @@ import Model from "./Model";
 // RMSProp
 
 export default class LogisticRegression extends Model {
+  constructor(
+    public readonly features: number[][],
+    public readonly labels: number[],
+    protected epochs: number = 1000,
+    protected bias: number = -1,
+    protected learningRate: number = 0.2,
+  ) {
+    super(features, labels, epochs, bias, learningRate);
+  }
+  
   private adjustWeights(error: number, features: number[]) {
     this.setWeights(
       this.weights.map(
@@ -78,6 +88,11 @@ export default class LogisticRegression extends Model {
   }
 
   backward(i: number, predicted: number, features: number[]): void {
-    throw new Error("Method not implemented.");
+    const errorValue = error(this.labels[i], predicted);
+    this.gradBias = this.bias + this.learningRate * errorValue;
+
+    this.gradWeights = this.weights.map(
+      (weight, i) => weight + this.learningRate * errorValue * features[i],
+    );
   }
 }

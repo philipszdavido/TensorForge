@@ -6,6 +6,16 @@ import dot from "../math/vector/dot";
 import Model from "./Model";
 
 export class LinearRegression extends Model {
+  constructor(
+    public readonly features: number[][],
+    public readonly labels: number[],
+    protected epochs: number = 1000,
+    protected bias: number = -1,
+    protected learningRate: number = 0.2,
+  ) {
+    super(features, labels, epochs, bias, learningRate);
+  }
+  
   private adjustWeights(error: number, features: number[]) {
     this.setWeights(
       this.weights.map(
