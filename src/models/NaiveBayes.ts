@@ -4,13 +4,17 @@ export interface DataSet {
 }
 
 export default class NaiveBayes {
-  private readonly model = {};
+  private model: Record<string, Record<string, number>> = {};
+  private priors: Record<string, number> = {};
 
   constructor(public readonly sample: DataSet[]) {}
 
   train(labels: string[]) {
     const sums = this.findSums();
     const priors = this.findPriors(sums);
+
+    this.priors = priors;
+    this.model = this.findPosteriors(labels);
   }
 
   findPosteriors(labels: string[]) {
@@ -18,7 +22,7 @@ export default class NaiveBayes {
 
     for (let i = 0; i < this.sample.length; i++) {
       const el = this.sample[i];
-      const words = el.data.split(" ");
+      const words = this.tokenize(el.data);
 
       for (let j = 0; j < words.length; j++) {
         const word = words[j];
@@ -28,9 +32,9 @@ export default class NaiveBayes {
         }
 
         model[word][el.label] = (model[word][el.label] || 0) + 1;
-
       }
     }
+    return model;
   }
 
   findPriors(sums: Record<string, number>) {
@@ -61,8 +65,12 @@ export default class NaiveBayes {
     const t: Record<string, number> = {};
     for (let index = 0; index < labels.length; index++) {
       const label = labels[index];
-      t[label] = 1;
+      t[label] = 0;
     }
     return t;
+  }
+
+  tokenize(text: string) {
+    return text.split(" ");
   }
 }
