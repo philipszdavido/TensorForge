@@ -88,10 +88,10 @@ export default class LogisticRegression extends Model {
 
   backward(i: number, predicted: number, features: number[]): void {
     const errorValue = error(this.labels[i], predicted);
-    this.gradBias = this.bias + this.learningRate * errorValue;
+    this.gradBias = errorValue;
 
-    this.gradWeights = this.weights.map(
-      (weight, i) => weight + this.learningRate * errorValue * features[i],
+    this.gradWeights = this.features.map(
+      (feature, i) => errorValue * feature[i],
     );
   }
 }
