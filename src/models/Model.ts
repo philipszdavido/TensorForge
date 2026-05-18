@@ -13,9 +13,10 @@ export default abstract class Model {
     protected bias: number = -1,
     protected learningRate: number = 0.2,
   ) {
-    assert(features.length === 0, "Features cannot be empty");
+    assert(features.length > 0, "Features cannot be empty");
+
     assert(
-      features.length !== labels.length,
+      features.length === labels.length,
       "Features and labels size mismatch",
     );
 
@@ -37,11 +38,10 @@ export default abstract class Model {
   }
 
   getGradWeights() {
-    return this.gradWeights
+    return this.gradWeights;
   }
 
   getGradBias() {
     return this.gradBias;
   }
-
 }
