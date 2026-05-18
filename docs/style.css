@@ -1,0 +1,7 @@
+body { font-family: Arial, sans-serif; margin: 2em; background: #fafbfc; color: #222; }
+h1 { color: #2d5be3; }
+a { color: #2d5be3; text-decoration: none; }
+a:hover { text-decoration: underline; }
+ul { margin-bottom: 2em; }
+pre { background: #f4f4f4; padding: 1em; border-radius: 6px; }
+footer { margin-top: 3em; color: #888; font-size: 0.9em; }

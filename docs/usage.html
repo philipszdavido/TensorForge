@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Usage Example - TensorForge Docs</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <h1>Usage Example</h1>
+    <pre><code>import { Matrix, Vector } from './src/core';
+import KNN from './src/models/KNN';
+
+// Create a vector
+const v = new Vector(3);
+v.set(0, 1);
+v.set(1, 2);
+v.set(2, 3);
+
+// Create a matrix
+const m = Matrix.from([
+  [1, 2, 3],
+  [4, 5, 6],
+]);
+
+// Use KNN (example)
+const samples = [
+  [1, 2],
+  [2, 3],
+  [3, 4],
+];
+const knn = new KNN(samples);
+const prediction = knn.predict([2, 3]);
+console.log('KNN Prediction:', prediction);
+  </code></pre>
+    <a href="index.html">Back to Home</a>
+  </body>
+</html>
