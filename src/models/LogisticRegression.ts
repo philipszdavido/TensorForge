@@ -1,7 +1,6 @@
 import assert from "../assert/assert";
 import { Vector } from "../core/Vector";
 import error from "../error/error";
-import random from "../math/random";
 import sigmoid from "../math/sigmoid";
 import dot from "../math/vector/dot";
 import Model from "./Model";
@@ -23,7 +22,7 @@ export default class LogisticRegression extends Model {
   ) {
     super(features, labels, epochs, bias, learningRate);
   }
-  
+
   private adjustWeights(error: number, features: number[]) {
     this.setWeights(
       this.weights.map(
