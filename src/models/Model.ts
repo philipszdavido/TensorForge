@@ -29,8 +29,19 @@ export default abstract class Model {
   abstract forward(x: number[]): number;
 
   abstract backward(i: number, predicted: number, features: number[]): void;
-  
+  abstract setBias(bias: number): void;
+  abstract setWeights(weights: number[]): void;
+
   getWeights() {
-    return this.weights
+    return this.weights;
   }
+
+  getGradWeights() {
+    return this.gradWeights
+  }
+
+  getGradBias() {
+    return this.gradBias;
+  }
+
 }

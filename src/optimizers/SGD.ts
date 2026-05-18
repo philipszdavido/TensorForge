@@ -7,12 +7,17 @@ export default class SGD {
     private learningRate = 0.01,
   ) {}
 
-  forward() {
+  step() {
+
     const newWeights = this.model.getWeights().map((weight, i) => {
-     return weight - this.learningRate * this.model.gradWeights[i];
+     return weight - this.learningRate * this.model.getGradWeights()[i];
     });
 
     this.model.setWeights(newWeights);
-    this.model.setBias(this.model.gradBias);
+
+    const newBias = this.model.getGradBias() * this.learningRate;
+    
+    this.model.setBias(newBias);
+
   }
 }
