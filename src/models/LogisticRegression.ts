@@ -4,26 +4,16 @@ import error from "../error/error";
 import random from "../math/random";
 import sigmoid from "../math/sigmoid";
 import dot from "../math/vector/dot";
+import Model from "./Model";
 
 // features = [[1,3], [4,2]]
 // label    = [ 0,    1]
+// SGD
+// Mini-batch SGD
+// Adam
+// RMSProp
 
-export default class LogisticRegression {
-  private weights: number[];
-  constructor(
-    public readonly features: number[][],
-    public readonly labels: number[],
-    private epochs: number = 1000,
-    private bias: number = -1,
-    private learningRate: number = 0.2,
-  ) {
-    this.weights = new Array(features[0].length);
-
-    for (let i = 0; i < this.weights.length; i++) {
-      this.weights[i] = random() + i;
-    }
-  }
-
+export default class LogisticRegression extends Model {
   private adjustWeights(error: number, features: number[]) {
     this.setWeights(
       this.weights.map(
@@ -71,15 +61,20 @@ export default class LogisticRegression {
   train() {
     for (let i = 0; i < this.epochs; i++) {
       this.features.forEach((feat, i) => {
-        const y_bar = this.calc(feat, this.weights, this.bias);
+        const z = this.calc(feat, this.weights, this.bias);
 
-        const predicted = this.activate(y_bar);
-        const _error = error(predicted, this.labels[i]);
+        const predicted = this.activate(z);
+        const errorValue = error(this.labels[i], predicted);
 
-        this.adjustWeights(_error, feat);
+        this.adjustWeights(errorValue, feat);
 
-        this.adjustBias(_error);
+        this.adjustBias(errorValue);
       });
     }
   }
+
+  forward(x: number[]) {
+    return this.activate(this.calc(x, this.weights, this.bias));
+  }
+  
 }
