@@ -1,1 +1,3 @@
-export default function random() {}
+export default function random() {
+    return Math.random()
+}
