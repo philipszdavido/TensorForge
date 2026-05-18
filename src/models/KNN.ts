@@ -58,12 +58,6 @@ export default class KNN {
     return pred;
   }
 
-  //   Think of it like asking neighbors
-  // If you're moving into a neighborhood and ask:
-  // 1 person → opinion may be unreliable
-  // 5 people → better
-  // 100 people → too broad, may lose local relevance
-  // That’s exactly what k does in KNN.
   majorityVote(data: { distance: number; label: string }[]): string {
     const votes: Record<string, number> = {};
 

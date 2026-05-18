@@ -76,5 +76,8 @@ export default class LogisticRegression extends Model {
   forward(x: number[]) {
     return this.activate(this.calc(x, this.weights, this.bias));
   }
-  
+
+  backward(i: number, predicted: number, features: number[]): void {
+    throw new Error("Method not implemented.");
+  }
 }
