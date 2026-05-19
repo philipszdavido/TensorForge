@@ -20,11 +20,14 @@ export default abstract class Model {
       "Features and labels size mismatch",
     );
 
-    this.weights = new Array(features[0].length);
+    this.weights = this.initializeWeights(features[0].length); //new Array(features[0].length);
 
-    for (let i = 0; i < this.weights.length; i++) {
-      this.weights[i] = (Math.random() - 0.5) * 0.01;
-    }
+  }
+
+  initializeWeights(size: number): number[] {
+    const limit = Math.sqrt(1 / size);
+
+    return Array.from({ length: size }, () => (Math.random() * 2 - 1) * limit);
   }
 
   abstract forward(x: number[]): number;
