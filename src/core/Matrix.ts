@@ -5,13 +5,13 @@ export class Matrix {
   private readonly data: Array<Vector> = [];
 
   constructor(
-    public readonly cols: number,
+    public readonly columns: number,
     public readonly rows: number,
   ) {
     for (let index = 0; index < this.rows; index++) {
-      const row = new Vector(this.cols);
+      const row = new Vector(this.columns);
 
-      for (let j = 0; j < this.cols; j++) {
+      for (let j = 0; j < this.columns; j++) {
         const col = j;
         row.set(j, col);
       }
@@ -29,12 +29,12 @@ export class Matrix {
   }
 
   mul(a: Matrix) {
-    const newData = new Matrix(a.cols, this.rows);
+    const newData = new Matrix(a.columns, this.rows);
 
     for (let i = 0; i < this.rows; i++) {
-      for (let j = 0; j < a.cols; j++) {
+      for (let j = 0; j < a.columns; j++) {
         let sum = 0;
-        for (let k = 0; k < this.cols; k++) {
+        for (let k = 0; k < this.columns; k++) {
           const result = this.get(i, j) * a.get(i, j);
           sum += result;
         }
