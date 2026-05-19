@@ -8,7 +8,7 @@ export class LinearRegression extends Model {
   constructor(
     public readonly features: number[][],
     public readonly labels: number[],
-    protected epochs: number = 10,
+    protected epochs: number = 1000,
     protected bias: number = -1,
     protected learningRate: number = 0.0001,
   ) {
@@ -102,11 +102,11 @@ export class LinearRegression extends Model {
   }
 
   backward(i: number, predicted: number, features: number[]): void {
-    const errorValue = error(this.labels[i], predicted);
-    this.gradBias = this.bias + this.learningRate * errorValue;
+    const errorValue = error(predicted, this.labels[i]);
+    this.gradBias = this.bias - this.learningRate * errorValue;
 
     this.gradWeights = this.weights.map(
-      (weight, i) => weight + this.learningRate * errorValue * features[i],
+      (weight, i) => weight - this.learningRate * errorValue * features[i],
     );
   }
 }
