@@ -49,7 +49,7 @@ export function vector_average(vec_a: Vector) {
     return vector_sum(vec_a) / vec_a.length;
 }
 
-function ele_mul(n: number, vector: Array<number>) {
+export function ele_mul(n: number, vector: Array<number>) {
   let output = Array(vector.length);
 
   assert(output.length == vector.length);

@@ -22,6 +22,11 @@ export class Vector {
     let result = 0;
     for (let index = 0; index < this.data.length; index++) {
       const element = this.data[index];
+      if (index == 0) {
+        result = element;
+        continue;
+      }
+
       result += element;
     }
     return result;
@@ -31,6 +36,10 @@ export class Vector {
     let result = 0;
     for (let index = 0; index < this.data.length; index++) {
       const element = this.data[index];
+      if (index == 0) {
+        result = element;
+        continue;
+      }
       result *= element;
     }
     return result;
@@ -40,6 +49,11 @@ export class Vector {
     let result = 0;
     for (let index = 0; index < this.data.length; index++) {
       const element = this.data[index];
+      if (index == 0) {
+        result = element;
+        continue;
+      }
+
       result += element;
     }
     return result / this.length;
