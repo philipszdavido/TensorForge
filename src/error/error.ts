@@ -1,3 +1,3 @@
 export default function error(predicted: number, actual: number) {
-    return actual - predicted;
+    return predicted - actual;
 }
