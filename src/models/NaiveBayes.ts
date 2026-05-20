@@ -1,16 +1,22 @@
-import { Vector } from "../core/Vector";
-
 export interface DataSet {
   data: string;
   label: string;
 }
 
-export class NaiveBayes {
+export default class NaiveBayes {
   private TotalOfAllWordsInLabel: Record<string, number> = {};
   private TotalOfAWordPerLabel: Record<string, Record<string, number>> = {};
   private TotalCountOfLabels: Record<string, number> = {};
 
-  train(samples: DataSet[], labels: string[]) {
+  constructor(
+    private readonly samples: DataSet[],
+    private readonly labels: string[],
+  ) {}
+
+  train() {
+    const labels = this.labels;
+    const samples = this.samples;
+
     for (let i = 0; i < samples.length; i++) {
       const sample = samples[i];
       const label = sample.label;
@@ -43,8 +49,10 @@ export class NaiveBayes {
     }
   }
 
-  predict(_text: string, labels: string[]) {
-    const text = _text.split(" ");
+  predict(sampleText: string) {
+    const text = sampleText.split(" ");
+    const labels = this.labels;
+
     console.log("TotalOfAllWordsInLabel: ", this.TotalOfAllWordsInLabel);
     console.log("TotalOfAWordPerLabel: ", this.TotalOfAWordPerLabel);
     console.log("TotalCountOfLabels: ", this.TotalCountOfLabels);
@@ -84,8 +92,22 @@ export class NaiveBayes {
         scores[label].push(wordProbInLabel / (wordProbInLabel + otherP) || 0);
       }
     }
-    
+
+    const TotalScores: Record<string, number> = {};
+    let highestScore = 0;
+    let highest = "";
+    for (const label of labels) {
+      const Total = scores[label].reduce((acc, val) => acc + val, 0);
+      TotalScores[label] = Total;
+
+      if (Total > highestScore) {
+        highestScore = Total;
+        highest = label;
+      }
+    }
 
     console.log(scores);
+
+    return highest;
   }
 }
