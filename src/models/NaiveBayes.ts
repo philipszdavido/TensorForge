@@ -53,10 +53,6 @@ export default class NaiveBayes {
     const text = sampleText.split(" ");
     const labels = this.labels;
 
-    console.log("TotalOfAllWordsInLabel: ", this.TotalOfAllWordsInLabel);
-    console.log("TotalOfAWordPerLabel: ", this.TotalOfAWordPerLabel);
-    console.log("TotalCountOfLabels: ", this.TotalCountOfLabels);
-
     const scores: Record<string, Array<number>> = {};
     for (const label of labels) {
       scores[label] = [];
@@ -67,12 +63,10 @@ export default class NaiveBayes {
 
       for (const label of labels) {
         // prob of this word in class label
-        console.log(word, label);
+
         const wordProbInLabel =
           (this.TotalOfAWordPerLabel?.[word]?.[label] || 0) /
           this.TotalOfAllWordsInLabel[label];
-
-        console.log(wordProbInLabel);
 
         let TotalOfWordsNotInThisLabel = 0;
         let TotalOfAWordPerNotInThisLabel = 0;
@@ -83,8 +77,6 @@ export default class NaiveBayes {
           TotalOfAWordPerNotInThisLabel +=
             this.TotalOfAWordPerLabel?.[word]?.[_label] || 0;
         }
-
-        console.log(TotalOfWordsNotInThisLabel, TotalOfAWordPerNotInThisLabel);
 
         const otherP =
           TotalOfAWordPerNotInThisLabel / TotalOfWordsNotInThisLabel;
@@ -105,8 +97,6 @@ export default class NaiveBayes {
         highest = label;
       }
     }
-
-    console.log(scores);
 
     return highest;
   }
