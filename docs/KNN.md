@@ -101,10 +101,10 @@ You already understand the core algorithm correctly.
 The next step is learning:
 
 weighted KNN
-KD-Trees
-Ball Trees
-HNSW
-vector databases
-ANN search
-SIMD/vectorized math
-batching/GPU search
+- KD-Trees
+- Ball Trees
+- HNSW
+- vector databases
+- ANN search
+- SIMD/vectorized math
+- batching/GPU search
