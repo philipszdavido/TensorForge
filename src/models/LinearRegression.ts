@@ -15,7 +15,7 @@ export class LinearRegression extends Model {
     super(features, labels, epochs, bias, learningRate);
   }
 
-  private adjustWeights(error: number, features: number[]) {
+  protected adjustWeights(error: number, features: number[]) {
     this.setWeights(
       this.weights.map(
         (weight, i) => weight - this.learningRate * error * features[i],
@@ -23,7 +23,7 @@ export class LinearRegression extends Model {
     );
   }
 
-  private adjustBias(error: number) {
+  protected adjustBias(error: number) {
     const bias = this.bias - this.learningRate * error;
     this.setBias(bias);
   }

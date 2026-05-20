@@ -26,13 +26,13 @@ export default class LogisticRegression extends Model {
   private adjustWeights(error: number, features: number[]) {
     this.setWeights(
       this.weights.map(
-        (weight, i) => weight + this.learningRate * error * features[i],
+        (weight, i) => weight - this.learningRate * error * features[i],
       ),
     );
   }
 
   private adjustBias(error: number) {
-    const bias = this.bias + this.learningRate * error;
+    const bias = this.bias - this.learningRate * error;
     this.setBias(bias);
   }
 
@@ -73,7 +73,7 @@ export default class LogisticRegression extends Model {
         const z = this.calc(feat, this.weights, this.bias);
 
         const predicted = this.activate(z);
-        const errorValue = error(this.labels[i], predicted);
+        const errorValue = error(predicted, this.labels[i]);
 
         this.adjustWeights(errorValue, feat);
 
@@ -87,7 +87,7 @@ export default class LogisticRegression extends Model {
   }
 
   backward(i: number, predicted: number, features: number[]): void {
-    const errorValue = error(this.labels[i], predicted);
+    const errorValue = error(predicted, this.labels[i]);
     this.gradBias = errorValue;
 
     this.gradWeights = features.map(
