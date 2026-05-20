@@ -5,203 +5,87 @@ export interface DataSet {
   label: string;
 }
 
-export default class NaiveBayes {
-  private model: Record<string, Record<string, number>> = {};
-  private priorProbabilities: Record<string, number> = {};
-  private sums: Record<string, number> = {};
-  private labels: string[] = [];
+export class NaiveBayes {
+  private TotalOfAllWordsInLabel: Record<string, number> = {};
+  private TotalOfAWordPerLabel: Record<string, Record<string, number>> = {};
+  private TotalCountOfLabels: Record<string, number> = {};
 
-  private totalWordsPerLabel: Record<string, number> = {}; //
-  private vocabulary: Set<string> = new Set(); //
+  train(samples: DataSet[], labels: string[]) {
+    for (let i = 0; i < samples.length; i++) {
+      const sample = samples[i];
+      const label = sample.label;
 
-  constructor(public readonly sample: DataSet[]) {}
-
-  __predict(text: string) {
-    const total = this.sample.length;
-
-    const labelProbs: Record<string, number[]> = {};
-
-    for (const label in this.priorProbabilities) {
-      labelProbs[label] = [];
-    }
-
-    const words = this.tokenize(text);
-    for (const word of words) {
-      if (this.model[word]) {
-        for (const label in this.labels) {
-          labelProbs[label].push(
-            this.model[word][label] /*this.sums[label] * total*/ /
-              (this.priorProbabilities[label] * total * total),
-          );
-        }
+      if (!this.TotalOfAllWordsInLabel[label]) {
+        this.TotalOfAllWordsInLabel[label] = 0;
       }
-    }
 
-    const prods: Record<string, number> = {};
-    let sum = 0;
-
-    for (const label in labelProbs) {
-      const result = Math.log(
-        Vector.from(labelProbs[label]).mul() * this.sums[label],
-      );
-      prods[label] = result;
-      sum += result;
-    }
-
-    console.log(prods);
-    const prob: Record<string, number> = {};
-    for (const label in prods) {
-      prob[label] = prods[label] / sum;
-    }
-
-    // console.log(prob, prods, labelProbs, this.sums);
-    return prob;
-  }
-
-  _predict(text: string) {
-    const total = this.sample.length;
-
-    const labelProbs: Record<string, number[]> = {};
-
-    for (const label in this.priorProbabilities) {
-      labelProbs[label] = [];
-    }
-
-    const words = this.tokenize(text);
-    for (const word of words) {
-      if (this.model[word]) {
-        
-        for (const label of this.labels) {
-          labelProbs[label].push(
-            this.model[word][label] /
-              (this.priorProbabilities[label] * total * total),
-          );
-        }
+      if (!this.TotalCountOfLabels[label]) {
+        this.TotalCountOfLabels[label] = 0;
       }
-    }
+      this.TotalCountOfLabels[label]++;
 
-    const prods: Record<string, number> = {};
-    let sum = 0;
-
-    for (const label in labelProbs) {
-
-      const productResult =
-        labelProbs[label].reduce((a, b) => a * b, 1) * this.sums[label];
-      prods[label] = productResult;
-      sum += productResult;
-    }
-
-    console.log(prods);
-    const prob: Record<string, number> = {};
-    for (const label in prods) {
-      prob[label] = sum === 0 ? 0 : prods[label] / sum;
-    }
-
-    // console.log(prob, prods, labelProbs, this.sums);
-    return prob;
-  }
-
-  predict(text: string): string {
-    const words = this.tokenize(text);
-    const scores: Record<string, number> = {};
-    const vocabSize = this.vocabulary.size;
-
-    for (const label in this.priorProbabilities) {
-      if (!Object.hasOwn(this.priorProbabilities, label)) continue;
-
-      scores[label] = Math.log(this.priorProbabilities[label]);
-
-      for (const word of words) {
-        const wordCountInLabel = this.model[word]
-          ? this.model[word][label] || 0
-          : 0;
-        const totalWordsInLabel = this.totalWordsPerLabel[label] || 0;
-
-        const wordProbability =
-          (wordCountInLabel + 1) / (totalWordsInLabel + vocabSize);
-
-        scores[label] += Math.log(wordProbability);
-      }
-    }
-
-    // console.log(this.totalWordsPerLabel, this.model, this.sums, scores)
-console.log(scores);
-    return Object.keys(scores).reduce((a, b) =>
-      scores[a] > scores[b] ? a : b,
-    );
-  }
-
-  train(labels: string[]) {
-    this.labels = labels;
-
-    const sums = this.findSums();
-    this.sums = sums;
-    const priorProbabilities = this.findPriorProbabilities(sums);
-
-    for (const label of labels) {
-      this.totalWordsPerLabel[label] = 0;
-    }
-
-    this.priorProbabilities = priorProbabilities;
-    this.model = this.findPosteriors(labels);
-  }
-
-  findPosteriors(labels: string[]) {
-    const model: Record<string, Record<string, number>> = {};
-
-    for (let i = 0; i < this.sample.length; i++) {
-      const el = this.sample[i];
-      const words = this.tokenize(el.data);
+      const words = sample.data.split(" ");
 
       for (let j = 0; j < words.length; j++) {
         const word = words[j];
-        this.vocabulary.add(word); //
 
-        if (!model[word]) {
-          model[word] = this.initModel(labels);
+        if (!this.TotalOfAWordPerLabel[word]) {
+          this.TotalOfAWordPerLabel[word] = {};
+          for (const label of labels) {
+            this.TotalOfAWordPerLabel[word][label] = 0;
+          }
         }
 
-        model[word][el.label] = (model[word][el.label] || 0) + 1;
-        this.totalWordsPerLabel[el.label] += 1; //
+        this.TotalOfAWordPerLabel[word][label] += 1;
+
+        this.TotalOfAllWordsInLabel[label] += 1;
       }
     }
-    return model;
   }
 
-  findPriorProbabilities(sums: Record<string, number>) {
-    const priorProbabilities: Record<string, number> = {};
+  predict(_text: string, labels: string[]) {
+    const text = _text.split(" ");
+    console.log("TotalOfAllWordsInLabel: ", this.TotalOfAllWordsInLabel);
+    console.log("TotalOfAWordPerLabel: ", this.TotalOfAWordPerLabel);
+    console.log("TotalCountOfLabels: ", this.TotalCountOfLabels);
 
-    for (const key in sums) {
-      if (!Object.hasOwn(sums, key)) continue;
-
-      const sum = sums[key];
-      priorProbabilities[key] = sum / this.sample.length;
+    const scores: Record<string, Array<number>> = {};
+    for (const label of labels) {
+      scores[label] = [];
     }
 
-    return priorProbabilities;
-  }
+    for (const word of text) {
+      // calc prob of this word for all labels
 
-  findSums() {
-    const sums: Record<string, number> = {};
+      for (const label of labels) {
+        // prob of this word in class label
+        console.log(word, label);
+        const wordProbInLabel =
+          (this.TotalOfAWordPerLabel?.[word]?.[label] || 0) /
+          this.TotalOfAllWordsInLabel[label];
 
-    for (let index = 0; index < this.sample.length; index++) {
-      const label = this.sample[index].label;
-      sums[label] = (sums[label] == undefined ? 0 : sums[label]) + 1;
+        console.log(wordProbInLabel);
+
+        let TotalOfWordsNotInThisLabel = 0;
+        let TotalOfAWordPerNotInThisLabel = 0;
+
+        for (const _label of labels) {
+          if (_label == label) continue;
+          TotalOfWordsNotInThisLabel += this.TotalOfAllWordsInLabel[_label];
+          TotalOfAWordPerNotInThisLabel +=
+            this.TotalOfAWordPerLabel?.[word]?.[_label] || 0;
+        }
+
+        console.log(TotalOfWordsNotInThisLabel, TotalOfAWordPerNotInThisLabel);
+
+        const otherP =
+          TotalOfAWordPerNotInThisLabel / TotalOfWordsNotInThisLabel;
+
+        scores[label].push(wordProbInLabel / (wordProbInLabel + otherP) || 0);
+      }
     }
+    
 
-    return sums;
-  }
-
-  initModel(labels: string[]) {
-    const t: Record<string, number> = {};
-    for (let index = 0; index < labels.length; index++) {
-      const label = labels[index];
-      t[label] = 0;
-    }
-    return t;
-  }
-
-  tokenize(text: string) {
-    return text.split(" ");
+    console.log(scores);
   }
 }
