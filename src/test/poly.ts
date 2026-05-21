@@ -1,12 +1,24 @@
 import PolynomialRegression from "../models/PolyNomialRegression";
+import PolynomialRegressionTrainer from "../trainers/PolynomialRegressionTrainer";
+import MSELoss from "../loss/MSELoss";
+import StochasticGD from "../optimizers/SGD";
 
-const features = [[-5], [-4], [-3], [-2], [-1], [0], [1], [2], [3], [4], [5]];
+// const features = [[-5], [-4], [-3], [-2], [-1], [0], [1], [2], [3], [4], [5]];
+// const labels = [16, 9, 4, 1, 0, 1, 4, 9, 16, 25, 36];
 
-const labels = [16, 9, 4, 1, 0, 1, 4, 9, 16, 25, 36];
+const features = [
+    [1],
+    [2],
+    [3],
+    [4]
+];
 
-// @ts-ignore
-const poly = new PolynomialRegression(2, features, labels, 1000, 0.01)
-poly.expandPolynomialFeatures(2);
-poly.train();
+const labels = [1, 4, 9, 16];
 
-console.log(poly.predict([6]));
+const poly = new PolynomialRegression(3, features[0].length)
+// poly.expandPolynomialFeatures(2);
+
+const trainer = new PolynomialRegressionTrainer(features, labels);
+trainer.train(poly, new StochasticGD(poly), MSELoss);
+
+console.log(poly.predict([5]));

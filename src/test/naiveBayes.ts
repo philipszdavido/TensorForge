@@ -1,4 +1,4 @@
-import NaiveBayes, { DataSet, NB } from "../models/NaiveBayes";
+import NaiveBayes, { DataSet } from "../models/NaiveBayes";
 
 const dataset: DataSet[] = [
   {
@@ -16,6 +16,6 @@ const dataset: DataSet[] = [
 // console.log(nBayes.predict("win a lottery"));
 //console.log(nBayes._predict("win a lottery"));
 
-const nb = new NaiveBayes();
-nb.train(dataset, ["Spam", "NotSpam"])
-nb.predict("win a lottery", ["Spam", "NotSpam"]);
+const nb = new NaiveBayes(dataset, ["Spam", "NotSpam"]);
+nb.train()
+console.log(nb.predict("win a lottery"));

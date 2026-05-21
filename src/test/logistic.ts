@@ -1,7 +1,7 @@
-import BCELoss from "../error/BCELoss";
+import BCELoss from "../loss/BCELoss";
 import LogisticExpression from "../models/LogisticRegression";
 import DiscretePerceptron from "../models/Perceptron";
-import SGD from "../optimizers/SGD";
+import StochasticGD from "../optimizers/SGD";
 
 // features = [[1,3], [4,2]]
 // label    = [ 0,    1]
@@ -13,8 +13,8 @@ const bugs = [
 
 const labels = [0, 1];
 
-const lReg = new DiscretePerceptron(bugs, labels);
-const optimizer = new SGD(lReg);
+const lReg = new LogisticExpression(2);
+const optimizer = new StochasticGD(lReg);
 
 // lReg.train();
 
@@ -32,10 +32,11 @@ const optimizer = new SGD(lReg);
 
   for (epoch = 0; epoch < 1000; epoch++) {
     for (let i = 0; i < bugs.length; i++) {
+
       // Forward pass
       const yHat = lReg.forward(bugs[i]);
 
-      lReg.backward(i, yHat, bugs[i]);
+      lReg.backward(bugs[i], labels[i], yHat);
 
       const loss = BCELoss(labels[i], yHat);
 
@@ -45,8 +46,14 @@ const optimizer = new SGD(lReg);
     }
   }
 
-  console.log(lReg.predict([3, 1])); // 1
-  console.log(lReg.predict([1, 3])); // 0
+  console.log(
+    "Prediction for [4, 1] (Should be close to 1):",
+    lReg.predict([4, 1]),
+  );
+  console.log(
+    "Prediction for [1, 4] (Should be close to 0):",
+    lReg.predict([1, 4]),
+  );
 
-  console.log(epoch, totalLoss / bugs.length);
+  console.log(`Epoch ${epoch} | Avg Loss: ${totalLoss / bugs.length}`);
 })();
