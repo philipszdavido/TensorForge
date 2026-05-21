@@ -2,6 +2,10 @@
 
 TensorForge is a modular machine learning framework for JavaScript and TypeScript. It provides essential mathematical structures (scalars, vectors, matrices, tensors) and a growing suite of machine learning models and utilities, making it easy to build, experiment, and learn about ML algorithms in a familiar language.
 
+## Documentation
+
+[Docs](https://philipszdavido.github.io/TensorForgejs/)
+
 ## Features
 
 - **Core Math Structures:**
