@@ -1,3 +1,4 @@
+// Binary Cross Entropy
 export default function BCELoss(yHat: number, y: number) {
   const eps = 1e-15;
 
