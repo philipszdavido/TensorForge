@@ -1,8 +1,7 @@
 import Model from "../models/Model";
 import assert from "../assert/assert";
 import Optimizer from "../optimizers/Optimizer";
-import Regularizer from "../regularizers/Regularizer";
-import {Loss} from "../error";
+import {Loss} from "../loss";
 
 export default abstract class Trainer {
     constructor(
@@ -22,7 +21,6 @@ export default abstract class Trainer {
     abstract train(
         model: Model,
         optimizer: Optimizer,
-        lossFn: Loss,
-        regularizer: Regularizer
+        lossFn: Loss
     ): void;
 }

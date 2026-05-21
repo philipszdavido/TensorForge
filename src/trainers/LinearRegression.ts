@@ -1,9 +1,8 @@
 import Trainer from "./Trainer";
 import assert from "../assert/assert";
 import Model from "../models/Model";
-import Regularizer from "../regularizers/Regularizer";
 import Optimizer from "../optimizers/Optimizer";
-import {Loss} from "../error";
+import {Loss} from "../loss";
 
 export default class LinearRegressionTrainer extends Trainer {
 
@@ -15,8 +14,7 @@ export default class LinearRegressionTrainer extends Trainer {
     train(
         model: Model,
         optimizer: Optimizer,
-        lossFn: Loss,
-        regularizer: Regularizer
+        lossFn: Loss
     ) {
 
         let totalLoss = 0;
@@ -26,11 +24,11 @@ export default class LinearRegressionTrainer extends Trainer {
             for (let j = 0; j < this.x.length; j++) {
 
                 // Forward pass
-                const yHat = model.forward(this.x[i]);
+                const yHat = model.forward(this.x[j]);
 
-                model.backward(this.x[i], this.y[i], yHat);
+                model.backward(this.x[j], this.y[j], yHat);
 
-                const loss = lossFn(this.y[i] ,yHat);
+                const loss = lossFn(this.y[j] ,yHat);
 
                 totalLoss += loss;
 

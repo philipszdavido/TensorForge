@@ -1,12 +1,14 @@
 import Model from "../models/Model";
 import assert from "../assert/assert";
 import Optimizer from "./Optimizer";
+import Regularizer from "../regularizers/Regularizer";
 
 // Stochastic Gradient Descent
 export default class StochasticGD extends Optimizer{
 
   constructor(
     private readonly model: Model,
+    private readonly regularizer?: Regularizer,
     private learningRate = 0.01,
   ) {
     super();
@@ -14,14 +16,29 @@ export default class StochasticGD extends Optimizer{
 
   step() {
 
+    let regGrads: number[] =
+        new Array(this.model.getWeights().length).fill(0);
+
+    if (this.regularizer) {
+      regGrads =
+          this.regularizer.gradient(
+              this.model.getWeights()
+          );
+    }
+
     const newWeights = this.model.getWeights().map((weight, i) => {
-     return weight - this.learningRate * this.model.getGradWeights()[i];
+
+      const totalGrad =
+          this.model.getGradWeights()[i] +
+          regGrads[i];
+
+      return weight - this.learningRate * totalGrad;
     });
 
     this.model.setWeights(newWeights);
 
     const newBias = this.model.getGradBias() - this.learningRate * this.model.getGradBias();
-    
+
     this.model.setBias(newBias);
 
   }

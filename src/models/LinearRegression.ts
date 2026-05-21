@@ -7,7 +7,7 @@ export class LinearRegression extends Model {
 
   constructor(
       protected readonly inputSize: number,
-      protected bias: number = -1,
+      protected bias: number = 0,
   ) {
     super(inputSize, bias);
   }
@@ -33,6 +33,7 @@ export class LinearRegression extends Model {
   }
 
   forward(x: number[]) {
+    console.log(x, this.weights)
     return this.activate(this.calc(x, this.weights, this.bias));
   }
 

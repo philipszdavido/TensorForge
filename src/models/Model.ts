@@ -8,13 +8,15 @@ export default abstract class Model {
 
   protected constructor(
       protected readonly inputSize: number,
-      protected bias: number = -1,
+      protected bias: number = 0,
   ) {
 
-    this.weights = this.initializeWeights(inputSize); //new Array(features[0].length);
+    this.weights = this.initializeWeights(inputSize);
 
-    this.gradWeights = this.weights;
-    this.gradBias = this.bias;
+    this.gradWeights =
+        new Array(inputSize).fill(0);
+
+    this.gradBias = 0;
 
   }
 
