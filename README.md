@@ -1,4 +1,4 @@
-# TensorForge: Machine Learning framework for JavaScript
+# TensorForgejs: Machine Learning framework for JavaScript
 
 TensorForge is a modular machine learning framework for JavaScript and TypeScript. It provides essential mathematical structures (scalars, vectors, matrices, tensors) and a growing suite of machine learning models and utilities, making it easy to build, experiment, and learn about ML algorithms in a familiar language.
 
@@ -26,8 +26,8 @@ TensorForge is a modular machine learning framework for JavaScript and TypeScrip
 ## Installation
 
 ```sh
-git clone https://github.com/yourusername/TensorForge.git
-cd TensorForge
+git clone https://github.com/yourusername/TensorForgejs.git
+cd TensorForgejs
 npm install
 ```
 
@@ -78,18 +78,3 @@ Contributions are welcome! Feel free to open issues or submit pull requests for 
 [ISC](LICENSE)
 
 ---
-
-**TensorForge** — Build, learn, and experiment with machine learning in JavaScript/TypeScript.
-
-
-- Scalar = single number
-- Vector = 1D
-- Matrix = 2D
-- Tensor = ND
-
-
-- 5                    -> scalar
-- [1,2,3]              -> vector
-- [[1,2],[3,4]]        -> matrix
-- [[[...]]]            -> tensor
-
