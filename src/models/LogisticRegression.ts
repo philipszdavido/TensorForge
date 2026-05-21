@@ -1,4 +1,3 @@
-import assert from "../assert/assert";
 import { Vector } from "../core/Vector";
 import error from "../error/error";
 import sigmoid from "../math/sigmoid";
@@ -13,42 +12,16 @@ import Model from "./Model";
 // RMSProp
 
 export default class LogisticRegression extends Model {
+
   constructor(
-    public readonly features: number[][],
-    public readonly labels: number[],
-    protected epochs: number = 1000,
+      protected readonly inputSize: number,
     protected bias: number = -1,
-    protected learningRate: number = 0.2,
   ) {
-    super(features, labels, epochs, bias, learningRate);
-  }
-
-  private adjustWeights(error: number, features: number[]) {
-    this.setWeights(
-      this.weights.map(
-        (weight, i) => weight - this.learningRate * error * features[i],
-      ),
-    );
-  }
-
-  private adjustBias(error: number) {
-    const bias = this.bias - this.learningRate * error;
-    this.setBias(bias);
+    super(inputSize, bias);
   }
 
   protected calc(x: number[], weights: number[], bias: number) {
-    const result = dot(Vector.from(x), Vector.from(weights));
-    return result + bias;
-  }
-
-  setLearningRate(l: number) {
-    assert(typeof l == "number");
-    this.learningRate = l;
-  }
-
-  setEpochs(e: number) {
-    assert(typeof e == "number");
-    this.epochs = e;
+    return dot(Vector.from(x), Vector.from(weights)) + bias;
   }
 
   setBias(bias: number) {
@@ -67,31 +40,27 @@ export default class LogisticRegression extends Model {
     return this.activate(this.calc(x, this.weights, this.bias));
   }
 
-  train() {
-    for (let i = 0; i < this.epochs; i++) {
-      this.features.forEach((feat, i) => {
-        const z = this.calc(feat, this.weights, this.bias);
-
-        const predicted = this.activate(z);
-        const errorValue = error(predicted, this.labels[i]);
-
-        this.adjustWeights(errorValue, feat);
-
-        this.adjustBias(errorValue);
-      });
-    }
-  }
-
   forward(x: number[]) {
     return this.activate(this.calc(x, this.weights, this.bias));
   }
 
-  backward(i: number, predicted: number, features: number[]): void {
-    const errorValue = error(predicted, this.labels[i]);
+  backward(
+      x: number[],
+      y: number,
+      yHat: number
+  ) {
+
+    console.log(x, y, yHat, this.gradWeights)
+    const errorValue = error(yHat, y);
+
+    for (let i = 0; i < this.weights.length; i++) {
+
+      this.gradWeights[i] = errorValue * x[i];
+
+    }
+
     this.gradBias = errorValue;
 
-    this.gradWeights = features.map(
-      (feature) => errorValue * feature,
-    );
   }
+
 }

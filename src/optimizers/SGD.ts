@@ -1,11 +1,16 @@
 import Model from "../models/Model";
+import assert from "../assert/assert";
+import Optimizer from "./Optimizer";
 
 // Stochastic Gradient Descent
-export default class SGD {
+export default class StochasticGD extends Optimizer{
+
   constructor(
     private readonly model: Model,
     private learningRate = 0.01,
-  ) {}
+  ) {
+    super();
+  }
 
   step() {
 
@@ -20,4 +25,10 @@ export default class SGD {
     this.model.setBias(newBias);
 
   }
+
+  setLearningRate(l: number) {
+    assert(typeof l == "number");
+    this.learningRate = l;
+  }
+
 }
