@@ -31,6 +31,7 @@ images
 Ridge
 Lasso
 
+```ts
 interface Estimator {
 fit(X: Matrix, y: Vector): void
 }
@@ -42,3 +43,4 @@ predict(X: Matrix): Vector
 interface Transformer {
 transform(X: Matrix): Matrix
 }
+```
