@@ -33,7 +33,6 @@ export class LinearRegression extends Model {
   }
 
   forward(x: number[]) {
-    console.log(x, this.weights)
     return this.activate(this.calc(x, this.weights, this.bias));
   }
 
