@@ -30,7 +30,7 @@ TensorForge is a modular machine learning framework for JavaScript and TypeScrip
 ## Installation
 
 ```sh
-git clone https://github.com/yourusername/TensorForgejs.git
+git clone https://github.com/philipszdavido/TensorForgejs.git
 cd TensorForgejs
 npm install
 ```
@@ -38,8 +38,7 @@ npm install
 ## Usage Example
 
 ```typescript
-import { Matrix, Vector } from './src/core';
-import KNN from './src/models/KNN';
+import { Matrix, Vector, KNN } from 'TensorForgejs';
 
 // Create a vector
 const v = new Vector(3);
@@ -64,21 +63,8 @@ const prediction = knn.predict([2, 3]);
 console.log('KNN Prediction:', prediction);
 ```
 
-## Project Structure
-
-- `src/core/` — Core math structures (Matrix, Vector, Tensor)
-- `src/math/` — Math operations and utilities
-- `src/models/` — Machine learning models (KNN, LinearRegression, LogisticRegression)
-- `src/assert/` — Assertion utilities
-- `src/error/` — Error metrics and logging
-- `test/` — Example and test scripts
-
 ## Contributing
 
 Contributions are welcome! Feel free to open issues or submit pull requests for new features, bug fixes, or documentation improvements.
-
-## License
-
-[ISC](LICENSE)
 
 ---
