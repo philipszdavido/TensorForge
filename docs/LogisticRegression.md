@@ -465,3 +465,28 @@ you will eventually hate your codebase
 because every feature touches everything.
 
 That’s the framework wall every ML engineer eventually hits.
+
+
+    // normalizeFeatures(data: number[]) {
+    //   const numFeatures = this.features[0].length;
+    //   const numSamples = this.features.length;
+    //
+    //   for (let j = 0; j < numFeatures; j++) {
+    //     let sum = 0;
+    //     for (let i = 0; i < numSamples; i++) {
+    //       sum += this.features[i][j];
+    //     }
+    //     const mean = sum / numSamples;
+    //
+    //     let varianceSum = 0;
+    //     for (let i = 0; i < numSamples; i++) {
+    //       varianceSum += Math.pow(this.features[i][j] - mean, 2);
+    //     }
+    //     const stdDev = Math.sqrt(varianceSum / numSamples);
+    //
+    //     for (let i = 0; i < numSamples; i++) {
+    //       this.features[i][j] =
+    //         stdDev === 0 ? 0 : (this.features[i][j] - mean) / stdDev;
+    //     }
+    //   }
+    // }
