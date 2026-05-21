@@ -50,7 +50,6 @@ export default class LogisticRegression extends Model {
       yHat: number
   ) {
 
-    console.log(x, y, yHat, this.gradWeights)
     const errorValue = error(yHat, y);
 
     for (let i = 0; i < this.weights.length; i++) {
