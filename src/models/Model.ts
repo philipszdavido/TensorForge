@@ -40,6 +40,10 @@ export default abstract class Model {
     return this.weights;
   }
 
+  getBias() {
+    return this.bias;
+  }
+
   getGradWeights() {
     return this.gradWeights;
   }
