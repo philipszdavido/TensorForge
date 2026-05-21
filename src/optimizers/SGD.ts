@@ -37,7 +37,7 @@ export default class StochasticGD extends Optimizer{
 
     this.model.setWeights(newWeights);
 
-    const newBias = this.model.getGradBias() - this.learningRate * this.model.getGradBias();
+    const newBias = this.model.getBias() - this.learningRate * this.model.getGradBias();
 
     this.model.setBias(newBias);
 
