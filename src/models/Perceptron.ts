@@ -1,21 +1,51 @@
 import assert from "../assert/assert";
-import sigmoid from "../math/sigmoid";
-import LogisticRegression from "./LogisticRegression";
+import Model from "./Model";
+import dot from "../math/vector/dot";
+import {Vector} from "../core/Vector";
+import error from "../error/error";
 
-export default class DiscretePerceptron extends LogisticRegression {
+export default class DiscretePerceptron extends Model {
+
   constructor(
-    protected bias: number = -1,
+      protected readonly inputSize: number,
+      protected bias: number = -1,
   ) {
-    super(bias);
-  }
-  
-  step(prob: number) {
-    assert(typeof prob == "number");
-    return prob >= 0.5 ? 1 : 0;
+    super(inputSize, bias);
   }
 
-  protected activate(x: number): number {
-    assert(typeof x == "number");
-    return this.step(sigmoid(x));
+  protected calc(x: number[], weights: number[], bias: number) {
+    return dot(Vector.from(x), Vector.from(weights)) + bias;
   }
+
+  step(logit: number) {
+    assert(typeof logit == "number");
+    return logit >= 0 ? 1 : 0;
+  }
+
+  forward(x: number[]): number {
+    return this.step(this.calc(x, this.weights, this.bias))
+  }
+
+  backward(x: number[], y: number, yHat: number): void {
+
+    const errorValue = error(y, yHat);
+
+    for (let i = 0; i < this.weights.length; i++) {
+
+      this.weights[i] += errorValue * x[i] * 0.1;
+
+    }
+
+    this.bias += errorValue * 0.1;
+
+  }
+
+  setBias(bias: number): void {
+    this.bias = bias;
+  }
+
+  setWeights(weights: number[]): void {
+    this.weights = weights;
+  }
+
 }
