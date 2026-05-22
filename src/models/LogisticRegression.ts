@@ -41,7 +41,7 @@ export default class LogisticRegression extends Model {
   }
 
   forward(x: number[]) {
-    return this.activate(this.calc(x, this.weights, this.bias));
+    return this.predict(x);
   }
 
   backward(
