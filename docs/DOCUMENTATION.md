@@ -177,3 +177,16 @@ Contributions are welcome! Please open issues or submit pull requests for new fe
 ## License
 
 This project is licensed under the ISC License. See the LICENSE file for details.
+
+Libraries:
+
+asciichart
+cli-chart
+
+--------------------------------
+Epoch: 22
+Loss: 0.0021
+Accuracy: 98%
+--------------------------------
+[ LIVE LOSS GRAPH ]
+--------------------------------
