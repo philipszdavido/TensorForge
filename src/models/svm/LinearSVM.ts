@@ -23,6 +23,7 @@ export default class LinearSVM extends Model {
         const margin = y * yHat;
 
         if (margin >= 1) {
+            // w = w - lr * (2 * w)
 
             for (let i = 0; i < this.weights.length; i++) {
 
@@ -32,6 +33,9 @@ export default class LinearSVM extends Model {
             }
 
         } else {
+
+            //  w = w - lr * (2 * w - C * y_i * x_i);
+            //  b = b + lr * C * y_i;
 
             // here, we expand the boundaries +1 and -1 because
             // the margin fell within/beyond/below the boundaries
