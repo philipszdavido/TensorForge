@@ -63,6 +63,10 @@ export class Vector {
         return result / this.length;
     }
 
+    toArray() {
+        return [...this.data]
+    }
+
     static fromData(data: Float32Array) {
         const newData = new Vector(data.length);
 
@@ -105,6 +109,8 @@ export class Vector {
     }
 
     print(label?: string) {
+        console.log(`Vector(${this.data.length})`);
+
         const formatted = Array.from(this.data)
             .map(v => v.toFixed(4))
             .join(", ");

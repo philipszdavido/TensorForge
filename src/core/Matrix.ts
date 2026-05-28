@@ -45,6 +45,10 @@ export class Matrix {
         return newData;
     }
 
+    toVector(): Vector {
+        return this.data[0];
+    }
+
     static matrixMulVector(m: Matrix, v: Vector): Vector {
         assert(m.columns === v.length, `Shape mismatch: Matrix columns (${m.columns}) !== Vector length (${v.length})`);
 
@@ -109,7 +113,7 @@ export class Matrix {
     }
 
     static random(rows: number, columns: number) {
-        const data = new Matrix(rows, columns);
+        const data = new Matrix(columns, rows);
 
         for (let index = 0; index < rows; index++) {
             for (let j = 0; j < columns; j++) {
@@ -121,7 +125,7 @@ export class Matrix {
     }
 
     static zeros(rows: number, columns: number) {
-        const data = new Matrix(rows, columns);
+        const data = new Matrix(columns, rows);
 
         for (let index = 0; index < rows; index++) {
             for (let j = 0; j < columns; j++) {
