@@ -1,11 +1,17 @@
 import {Matrix} from "../core/Matrix";
 import {Vector} from "../core/Vector";
+import {elementwise_addition} from "../math/vector/sum";
+import {ReLU} from "../math/relu";
+import softmax from "../math/softmax";
 
-type Layer = {};
+type Layer = {
+    weight: Matrix,
+    bias: Matrix,
+};
 
 export default class NeuralNetwork {
 
-    layers: Matrix[] = []
+    layers: Layer[] = []
 
     constructor(public readonly inputSize: number, public readonly hidden: number[], public readonly outputSize: number) {
 
@@ -15,11 +21,18 @@ export default class NeuralNetwork {
 
             const layer = hidden[i]
             // outputs x inputs
-            this.layers.push(new Matrix(currentInputs, layer));
+            // new Matrix(cols, rows)
+            const weight = Matrix.random(layer, currentInputs);
+            const bias = Matrix.random(1, layer);
+
+            this.layers.push({weight, bias});
             currentInputs = layer;
         }
 
-        this.layers.push(new Matrix(currentInputs, outputSize));
+        const weight = Matrix.random(outputSize, currentInputs);
+        const bias = Matrix.random(currentInputs, 1);
+
+        this.layers.push({weight, bias});
 
     }
 
@@ -28,12 +41,31 @@ export default class NeuralNetwork {
         let acc: Vector = Vector.from(input);
 
         for (let i = 0; i < this.layers.length; i++) {
+
             const layer = this.layers[i];
-            acc = Matrix.matrixMulVector(layer, acc);
+
+            const mul_res = Matrix.matrixMulVector(layer.weight, acc)
+            const z = Vector.from(elementwise_addition(mul_res, layer.bias.toVector()))
+
+            if (i == this.layers.length - 1) {
+                acc = Vector.from(softmax(z.toArray()))
+            } else acc = ReLU(z);
+
         }
 
         return acc
 
     }
+
+    backward() {
+
+        const reversed_layers = this.layers.reverse();
+
+        for (let i = 0; i < reversed_layers.length; i++) {
+            const layer = reversed_layers[i];
+        }
+
+    }
+
 }
 
