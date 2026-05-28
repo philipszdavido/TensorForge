@@ -6,6 +6,24 @@ export interface DataLabel {
     label: string;
 }
 
+// Algorithm: K-Means Clustering
+// --------------------------------------------------------------
+//     Input: Dataset X, Number of clusters K
+// Output: Centroids μ, Cluster Assignments S
+//
+// 1. Initialize K cluster centroids (μ_1, μ_2, ..., μ_K) randomly or via K-Means++.
+// 2. Repeat until convergence:
+//     a. Expectation Step (Assignment):
+// Assign each data point x_i to the closest centroid:
+//     S_j = { x_i : ||x_i - μ_j||^2 <= ||x_i - μ_l||^2 for all l = 1,...,K }
+//
+// b. Maximization Step (Update):
+// Recalculate the position of each centroid by taking the mean of all points assigned to it:
+//     μ_j = (1 / |S_j|) * Sum(x_i) for x_i in S_j
+//
+//     3. Stop when centroids stop moving, or maximum iterations are reached.
+// --------------------------------------------------------------
+
 export default class KMeans {
 
     private centroids: Record<string, number[]> = {};
