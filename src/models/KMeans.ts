@@ -35,7 +35,7 @@ export default class KMeans {
     train(samples: DataLabel[], iterations = 10) {
 
         for (let i = 0; i < this.k; i++) {
-            this.chooseCentroid(i);
+            this.chooseCentroid(i, samples[i].data);
         }
 
         for (let iter = 0; iter < iterations; iter++) {
@@ -67,12 +67,14 @@ export default class KMeans {
 
     }
 
-    private chooseCentroid(i: number) {
+    private chooseCentroid(i: number, point: number[]) {
         const key = "C" + i;
-        this.centroids[key] = [i, random()];
+        this.centroids[key] = point;
     }
 
     private recomputeCentroids() {
+
+        const dimensions = Object.values(this.centroids)[0].length;
 
         for (const centroidsKey in this.centroids) {
 
@@ -80,16 +82,15 @@ export default class KMeans {
 
             const points = this.distances[centroidsKey];
             const len = points.length;
+            const new_point = new Array(dimensions).fill(0);
 
-            const x_axis = points.reduce((pv, cv, ci) => {
-                return pv + cv.data[0];
-            }, 0)
-
-            const y_axis = points.reduce((pv, cv, ci) => {
-                return pv + cv.data[1];
-            }, 0)
-
-            const new_point = [(x_axis) / len, (y_axis) / len]
+            for (let i = 0; i < dimensions; i++) {
+                let sum = 0;
+                for (let j = 0; j < len; j++) {
+                    sum += points[j].data[i];
+                }
+                new_point[i] = sum / len;
+            }
 
             this.centroids[centroidsKey] = new_point;
 
