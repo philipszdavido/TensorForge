@@ -10,4 +10,16 @@
 
 #include <stdio.h>
 
+class Scalar {
+    
+    int data;
+
+public:
+    
+    Scalar(int data) : data(data) {}
+    
+    static Scalar* one();
+    
+};
+
 #endif /* Scalar_hpp */

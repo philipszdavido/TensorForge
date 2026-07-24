@@ -10,4 +10,8 @@
 
 #include <stdio.h>
 
+class Linear {
+    
+};
+
 #endif /* Linear_hpp */

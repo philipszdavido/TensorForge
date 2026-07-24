@@ -6,3 +6,11 @@
 //
 
 #include "Vector.hpp"
+
+void Vector::set(int index, int newData) {
+    data[index] = newData;
+}
+
+int Vector::get(int index) {
+    return data[index];
+}

@@ -9,5 +9,16 @@
 #define Tensor_hpp
 
 #include <stdio.h>
+#include <vector>
+
+using namespace std;
+
+class Tensor {
+    
+    vector<int> shape;
+    vector<int> data;
+    
+public:
+};
 
 #endif /* Tensor_hpp */

@@ -9,5 +9,18 @@
 #define Vector_hpp
 
 #include <stdio.h>
+#include <vector>
+
+using namespace std;
+
+class Vector {
+    
+    vector<int> data;
+    
+public:
+    void set(int index, int data);
+    int get(int index);
+    
+};
 
 #endif /* Vector_hpp */

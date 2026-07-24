@@ -6,3 +6,8 @@
 //
 
 #include "Scalar.hpp"
+
+Scalar* Scalar::one() {
+    return new Scalar(1);
+}
+
